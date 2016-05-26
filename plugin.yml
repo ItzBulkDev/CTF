@@ -1,5 +1,7 @@
+# The original base of this plugin was coded by Bulk and HotshotHD
+
 name: CTF
-author: HotshotHD
+author: EPICMC
 main: CTF\CTF
 description: CTF Plugin
 version: 1.0.0
