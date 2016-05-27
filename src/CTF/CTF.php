@@ -101,10 +101,20 @@ class CTF extends PluginBase implements Listener {
 	}
 
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
-		if(strtolower($cmd->getName()) == "start") {
+		if(strtolower($cmd->getName()) == "ctf") {
+                  if(!isset($args[0])){
+                     $sender->sendMessage(TextFormat::GREEN."Commands:");
+                     $sender->sendMessage(TextFormat::AQUA."/ctf start " . TextFormat::GREN . "- Start the game");
+                    }
+                    if(strtolower($args[0]) == "start"){
+                      if($this->gameStarted() == 1){
+                        $sender->sendMessage(TextFormat::LIGHT_RED."The game has already been started!");
+                     }
+                      if($this->gameStarted() !== 1){
 			if($sender->hasPermission("ctf.command.start")) {
 				$this->startGame();
 			}
+                     }
 		} 
 	}
 
@@ -770,5 +780,3 @@ class CTF extends PluginBase implements Listener {
 		}
 	}
 }
-
-
