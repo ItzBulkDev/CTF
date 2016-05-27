@@ -110,6 +110,16 @@ class CTF extends PluginBase implements Listener {
                       if($this->gameStarted() == 1){
                         $sender->sendMessage(TextFormat::LIGHT_RED."The game has already been started!");
                      }
+                     if(strtolower($args[0]) == "red"){
+                     	if($this->gameStarted() !== 1){
+                     		$this->setTeam($sender, "red");
+                     	}
+                     }
+                     if(strtolower($args[0]) == "blue"){
+                     	if($this->gameStarted() !== 1){
+                     		$this->setTeam($sender, "blue");
+                     	}
+                     }
                       if($this->gameStarted() !== 1){
 			if($sender->hasPermission("ctf.command.start")) {
 				$this->startGame();
@@ -490,7 +500,28 @@ class CTF extends PluginBase implements Listener {
 
 		$player->getInventory()->setBoots($chestPlate);
 	}
-
+	public function changeTeam(Player $player, $team){
+		if($team == "red"){
+			if(strpos($player->getNameTag(), "BLUE")){
+				$player->setDisplayName(TextFormat::BLUE."[RED] " . $name . "");
+				$player->setNameTag(TextFormat::BLUE."[RED] " . $name . "");
+				unset($this->blueTeamMembers[$player->getName()]);
+				$this->redTeamMembers[$player->getName()] = $player;
+				$player->sendMessage(TextFormat::GREEN."Team set to RED!");
+				
+			}
+		}
+		if($team == "blue"){
+			if(strpos($player->getNameTag(), "RED")){
+				$player->setDisplayName(TextFormat::BLUE."[BLUE] " . $name . "");
+				$player->setNameTag(TextFormat::BLUE."[BLUE] " . $name . "");
+				unset($this->redTeamMembers[$player->getName()]);
+				$this->blueTeamMembers[$player->getName()] = $player;
+			}
+		}
+		if(strpos(strtolower($player->getNameTag()), $team)){
+			$
+	}
 	public function setTeam($player, $team) {
 		$name = $player->getName();
 		$group = $this->perms->getUserDataMgr()->getGroup($player)->getName();
