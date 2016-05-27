@@ -105,20 +105,11 @@ class CTF extends PluginBase implements Listener {
                   if(!isset($args[0])){
                      $sender->sendMessage(TextFormat::GREEN."Commands:");
                      $sender->sendMessage(TextFormat::AQUA."/ctf start " . TextFormat::GREN . "- Start the game");
+                     $sender->sendMessage(TextFormat::AQUA."/ctf [RED|BLUE|SPECTATOR] " . TextFormat::GREN . "- Change your team");
                     }
                     if(strtolower($args[0]) == "start"){
                       if($this->gameStarted() == 1){
                         $sender->sendMessage(TextFormat::LIGHT_RED."The game has already been started!");
-                     }
-                     if(strtolower($args[0]) == "red"){
-                     	if($this->gameStarted() !== 1){
-                     		$this->setTeam($sender, "red");
-                     	}
-                     }
-                     if(strtolower($args[0]) == "blue"){
-                     	if($this->gameStarted() !== 1){
-                     		$this->setTeam($sender, "blue");
-                     	}
                      }
                       if($this->gameStarted() !== 1){
 			if($sender->hasPermission("ctf.command.start")) {
@@ -126,7 +117,23 @@ class CTF extends PluginBase implements Listener {
 			}
                      }
 		} 
+	             if(strtolower($args[0]) == "red"){
+                     	if($this->gameStarted() !== 1){
+                     		$this->changeTeam($sender, "red");
+                     	}
+                     }
+                     if(strtolower($args[0]) == "blue"){
+                     	if($this->gameStarted() !== 1){
+                     		$this->changeTeam($sender, "blue");
+                     	}
+                     }
+                     if(strtolower($args[0]) == "spectator"){
+                     	if($this->gameStarted() !== 1){
+                     		$this->changeTeam($sender, "spectator");
+                     	}
+                     }
 	}
+}
 
 	public function onHungerChange(PlayerHungerChangeEvent $event) {	
 		$player = $event->getPlayer();
@@ -519,8 +526,23 @@ class CTF extends PluginBase implements Listener {
 				$this->blueTeamMembers[$player->getName()] = $player;
 			}
 		}
+		if($team == "spectator"){
+			if(strpos($player->getNameTag(), "RED")){
+				$player->setDisplayName(TextFormat::GRAY . "[SPECTATOR] " . $player->getName());
+				$player->setNameTag(TextFormat::GRAY . "[SPECTATOR] " . $player->getName());
+				unset($this->redTeamMembers[$player->getName()]);
+				$this->spectators[$player->getName()] = $player;
+			}
+			if(strpos($player->getNameTag(), "BLUE")){
+				$player->setDisplayName(TextFormat::GRAY . "[SPECTATOR] " . $player->getName());
+				$player->setNameTag(TextFormat::GRAY . "[SPECTATOR] " . $player->getName());
+				unset($this->blueTeamMembers[$player->getName()]);
+				$this->spectators[$player->getName()] = $player;
+			}
+		}
 		if(strpos(strtolower($player->getNameTag()), $team)){
-			$
+			$player->sendMessage(TextFormat::LIGHT_RED."You are already on this team!");
+		}
 	}
 	public function setTeam($player, $team) {
 		$name = $player->getName();
