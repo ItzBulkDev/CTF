@@ -107,9 +107,14 @@ class CTF extends PluginBase implements Listener {
                      $sender->sendMessage(TextFormat::AQUA."/ctf start " . TextFormat::GREN . "- Start the game");
                     }
                     if(strtolower($args[0]) == "start"){
+                      if($this->gameStarted() == 1){
+                        $sender->sendMessage(TextFormat::LIGHT_RED."The game has already been started!");
+                     }
+                      if($this->gameStarted() !== 1){
 			if($sender->hasPermission("ctf.command.start")) {
 				$this->startGame();
 			}
+                     }
 		} 
 	}
 
@@ -775,4 +780,3 @@ class CTF extends PluginBase implements Listener {
 		}
 	}
 }
-
